@@ -41,13 +41,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Build container
-        run: |
-          docker build -t image-test --build-arg TAG=${{ matrix.provider }} .
+      - name: Build image
+        run: docker build -t image-test .
+
+      - name: Install docker vulnerability scanner
+        run: apt-get install docker-scan-plugin
 
       - name: Run docker vulnerability scanner
-        run: |
-          docker scan image-test
+        run: docker scan image-test
 
       - name: Run azure vulnerability scanner
         uses: azure/container-scan@v0
