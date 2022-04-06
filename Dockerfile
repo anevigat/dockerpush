@@ -1,6 +1,5 @@
 # Base image
-ARG TAG=7.15.1
-FROM elastic/filebeat:$TAG
+FROM elastic/filebeat:7.15.1
 
 # Defaul envs
 ENV xpack.monitoring.enabled=false

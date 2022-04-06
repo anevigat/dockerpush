@@ -32,7 +32,7 @@ on:
 
 jobs:
   docker-test:
-    name: 'Test docker images'
+    name: 'Test docker image'
     if: github.event.inputs.image-test == 'True' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
