@@ -44,11 +44,6 @@ jobs:
       - name: Build image
         run: docker build -t image-test .
 
-      - name: Run azure vulnerability scanner
-        uses: azure/container-scan@v0
-        with:
-          image-name: image-test
-
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
