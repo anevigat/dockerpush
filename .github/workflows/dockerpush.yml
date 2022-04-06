@@ -45,7 +45,7 @@ jobs:
         run: docker build -t image-test .
 
       - name: Install docker vulnerability scanner
-        run: apt-get install docker-scan-plugin
+        run: sudo apt-get install docker-scan-plugin
 
       - name: Run docker vulnerability scanner
         run: docker scan image-test
