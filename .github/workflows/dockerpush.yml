@@ -77,4 +77,4 @@ jobs:
       with:
         push: true
         platforms: linux/amd64,linux/arm64
-        tags: anevigat/dockertest:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/dockertest:latest
