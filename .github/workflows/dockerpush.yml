@@ -21,7 +21,7 @@ on:
         type: boolean
         description: Run docker image tests
         required: false
-      push:
+      image-push:
         type: boolean
         description: Build and push image
         required: false
@@ -32,10 +32,10 @@ on:
 
 jobs:
   docker-test:
-    name: 'Test docker image'
+    name: Test docker image
     if: github.event.inputs.image-test == 'True' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -53,17 +53,23 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
-      # - name: Login to DockerHub
-      #   if: github.event_name != 'pull_request'
-      #   uses: docker/login-action@v1
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+  docker-push:
+    name: Push docker image to Docker Hub
+    if: github.event.inputs.image-push == 'True' || github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
-      # - name: Build and push
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     push: ${{ github.event_name != 'pull_request' }}
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     labels: ${{ steps.meta.outputs.labels }}
+    steps:
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: dockertest:latest
