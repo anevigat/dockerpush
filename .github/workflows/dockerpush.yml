@@ -55,9 +55,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    env:
-      IMAGE_NAME: DockerLAMP
-
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -85,4 +82,4 @@ jobs:
         platforms: linux/amd64,linux/arm64
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/dockertest:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/dockertest:${{ github.event.commit_hash }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/dockertest:${{ env.commit_hash }}
