@@ -25,10 +25,6 @@ on:
         type: boolean
         description: Build and push image
         required: false
-      image-tag:
-        description: 'Custom commit hash to deploy'
-        required: false
-        default: ''
 
 jobs:
   docker-test:
@@ -59,7 +55,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    env:
+      IMAGE_NAME: DockerLAMP
+
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Extract branch and tag
+      run: |
+        echo "commit_hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
 
@@ -77,4 +83,6 @@ jobs:
       with:
         push: true
         platforms: linux/amd64,linux/arm64
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/dockertest:latest
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/dockertest:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/dockertest:${{ github.event.commit_hash }}
