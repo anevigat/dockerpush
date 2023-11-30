@@ -1,5 +1,7 @@
-# Base image
-FROM elastic/filebeat:7.15.1
+FROM python:3
 
-# Defaul envs
-ENV xpack.monitoring.enabled=false
+WORKDIR /usr/src/app
+
+COPY requirements.txt ./
+
+RUN pip install --no-cache-dir -r requirements.txt
